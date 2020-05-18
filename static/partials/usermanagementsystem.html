@@ -1,0 +1,264 @@
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua">
+                <i class="fa fa-user"></i>
+            </span>
+        
+            <div class="info-box-content">
+                <span class="info-box-text">Admin Count</span>
+                <span  class="info-box-number">{{ (users|filterBy:['role']:'Admin').length }}</span>
+                <!-- <div class="progress">
+                    <div class="progress-bar"  ng-style="{'width':  '{{(users|filterBy:['role']:'Admin').length/users.length | percentage:2}}' , 'background':'deepskyblue'}" ></div>
+                </div> -->
+                <progress value = "{{(users|filterBy:['role']:'Admin').length/users.length * 100}}" max="100">    
+                </progress>
+                <span ng-if="users.length == 0" class="progress-description">0%</span>
+                <span ng-if = "users.length != 0" class="progress-description">{{(users|filterBy:['role']:'Admin').length/users.length | percentage:2}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua">
+                <i class="fa fa-user"></i>
+            </span>
+        
+            <div class="info-box-content">
+                <span class="info-box-text">User Count</span>
+                <!-- <span class="info-box-number" >{{users|filterBy: ['role']: 'User'|sum}}</span> -->
+                <span class="info-box-number">{{ (users|filterBy:['role']:'User').length }}</span>
+                <!-- <div class="progress">
+                    <div class="progress-bar" ng-style="{ 'width': '{{(users|filterBy:['role']:'User').length/users.length | percentage:2}}' }" style="background: deepskyblue;"></div>
+                </div> -->
+                <progress value="{{(users|filterBy:['role']:'User').length/users.length*100}}" max="100"></progress>
+                <span ng-if="users.length == 0" class="progress-description">0%</span>
+                <span ng-if = "users.length != 0" class="progress-description">{{(users|filterBy:['role']:'User').length/users.length | percentage:2}}</span>
+                
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+<div class="row" style="margin: auto;">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title"><b>Users Details List</b></h3>
+            <div class="box-tools">
+                <!-- <div class="checkbox" style="" >
+                    <label><input type="checkbox" ng-model="emailFull">Full Email</label>
+                  </div> -->
+                <span style="margin-right:50px;"><b>Full Email</b> <input type="checkbox" ng-model="emailFull"></input></span>
+                <span  style="margin-right:100px;"><b>Role</b> <select type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-model="userType" ng-options="user.name for user in userRoles"></select></span>
+                <button  class="btn btn-primary"  data-toggle="modal" data-target="#addUser" ng-click = "addUser()"><i class="fa fa-plus"></i> Add User</button>
+                <button ng-disabled="true" class="btn btn-primary"><i class="fa fa-edit" ></i> Bulk User Update</button>     
+            </div>
+        
+
+        </div>
+        <div class="box-body">
+            <table class="table table-stripped table-bordered">
+                <thead style="font-weight:bold;">
+                    <td>UserId</td>
+                    <td>Name</td>
+                    <td >Email</td>
+                    <td>Phone</td>
+                    <td>City</td>
+                    <td>Role</td>
+                    <td>Update</td>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in users | filterBy:['role']:userType.name | startFrom:(currentPage-1)*pageSize | limitTo:pageSize">
+                        <td>{{user.id}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email | customEmail:emailFull}}</td>
+                        <td>{{user.phone}}</td>
+                        <td>{{user.city}}</td>
+                        <td>{{user.role}}</td>
+                        <td>
+                            <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#editUser" ng-click="editUser(user)">Edit</button> -->
+                            <button class="btn btn-primary"  data-toggle="modal" data-target="#editUser" ng-click = "editUser(user)">
+                                <i class="fa fa-edit"></i>
+                                <!-- <span>Edit</span> -->
+                            </button>
+                            <button class="btn btn-danger" ng-click = "deleteUser(user)">
+                                <i class="fa fa-trash"></i>
+                                <!-- <span>Delete</span> -->
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul class="pull-right"  uib-pagination total-items="(users|filterBy:['role']:userType.name).length"  boundary-links=true  ng-model="currentPage" items-per-page="pageSize"></ul>
+        </div>
+        <!-- <div class="box-footer">
+            <ul class="pull-right" uib-pagination boundary-links=true total-items="users.length" ng-model="currentPage" items-per-page="pageSize"></ul>
+        </div> -->
+    </div>  
+    
+</div>
+
+
+<!-- Add Modal -->
+<div class="modal fade" id="addUser" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <!-- Adding title to modal -->
+                <h5 class="modal-title font-weight-bold">User Registration Form</h5>
+
+                <!-- Adding close button -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div> 
+            <!-- Modal header div close -->
+
+            <div class="modal-body" >
+                <!-- FORM -->
+
+                <form autocomplete="off" ng-submit="submit()" class="needs-validation" novalidate>
+                    
+                    <div class="form-group">
+                            <label for="uid">User Id</label>
+                            <input ng-blur = 'validateuid(newUser.id)' ng-model = "newUser.id" type="text" class="form-control" >
+                            <small  class="form-text text-muted">{{uiderror}}</small>
+                    </div>
+                                            
+                    <div class="form-group">
+                        <label for="uname">Name</label>
+                        <input ng-blur="validatename(newUser.name)" ng-model = "newUser.name" type="text" class="form-control" >
+                        <small class="form-text text-muted">{{unameerror}}</small>
+                    
+                    </div>
+                    <div class="form-group">
+                        <label for="uemail">Email</label>
+                        <input ng-blur="validateemail(newUser.email)" ng-model = "newUser.email" type="text"  class="form-control" >
+                        <small class="form-text text-muted">{{uemailerror}}</small>
+                    
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="uphone">Mobile Number</label>
+                        <input ng-blur="validatephone(newUser.phone)" ng-model="newUser.phone" type="text"  class="form-control">
+                        <small  class="form-text text-muted">{{uphoneerror}}</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ucity">City</label>
+                        <!-- <input ng-blur="validatecity(newUser.city)" ng-model="newUser.city" type="text"  class="form-control"> -->
+                        <ui-select  ng-model="city.selected">
+                            <ui-select-match placeholder="Enter City">{{$select.selected}}</ui-select-match>
+                            <ui-select-choices repeat="city in getCities($select.search) | filter: $select.search">
+                              <div ng-bind="city"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <!-- <small  class="form-text text-muted">{{ucityerror}}</small> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="urole">Role</label><br>
+                        <select class="browser-default custom-select" style="width: 100%;" ng-blur="validaterole(newUser.role)" ng-model="newUser.role" ng-options="user.name as user.name for user in userRoles"></select>
+                       
+                        <small  class="form-text text-muted">{{uroleerror}}</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="upass">Password</label>
+                        <input ng-blur="validatepassword(newUser.password)" ng-model="newUser.password" type="text"  class="form-control">
+                        <small  class="form-text text-muted">{{upasserror}}</small>
+                    </div>
+                    <div class="form-group">
+                        <button  ng-disabled = "check()" type="submit"  class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+                
+            </div>
+            <!-- MODAL BODY DIV CLOSE -->
+        </div>
+        <!-- MODAL CONTENT DIV CLOSE -->
+    </div>
+    <!-- MODAL DIV CLOSE -->
+</div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editUser" aria-hidden="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <!-- Adding title to modal -->
+                    <h5 class="modal-title font-weight-bold">Edit User</h5>
+    
+                    <!-- Adding close button -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> 
+                <!-- Modal header div close -->
+    
+                <div class="modal-body" >
+                    <!-- FORM -->
+    
+                    <form autocomplete="off" ng-submit="submitEdit()" class="needs-validation" novalidate>
+                        
+                            
+                        <div class="form-group">
+                            <label for="uname">Name</label>
+                            <input ng-blur="validatename(changeUser.name)" ng-model = "changeUser.name" type="text"  class="form-control" >
+                            <small class="form-text text-muted">{{unameerror}}</small>
+                        
+                        </div>
+                        <div class="form-group">
+                            <label for="uemail">Email</label>
+                            <input ng-blur="validateemail(changeUser.email)" ng-model = "changeUser.email" type="text"  class="form-control" >
+                            <small class="form-text text-muted">{{uemailerror}}</small>
+                        
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="uphone">Mobile Number</label>
+                            <input ng-blur="validatephone(changeUser.phone)" ng-model="changeUser.phone" type="text" class="form-control">
+                            <small  class="form-text text-muted">{{uphoneerror}}</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ucity">City</label>
+                            <!-- <input ng-blur="validatecity(changeUser.city)" ng-model="changeUser.city" type="text"  class="form-control"> -->
+                            <ui-select ng-model="changeUser.city">
+                                <ui-select-match placeholder="Enter City">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="city in getCities($select.search) | filter: $select.search">
+                                  <div ng-bind="city"></div>
+                                </ui-select-choices>
+                              </ui-select>
+                            <small  class="form-text text-muted">{{ucityerror}}</small>
+                        </div>                    
+                        <div class="form-group">
+                            <label for="urole">Role</label><br>
+                            <select class="browser-default custom-select" style="width: 100%;" ng-blur="validaterole(changeUser.role)" ng-model="changeUser.role" ng-options="user.name as user.name for user in userRoles"></select>
+                            <small  class="form-text text-muted">{{uroleerror}}</small>
+                        </div>
+                        
+                        <!-- <div class="form-group">
+                            <label for="urole">Role</label><br>
+                            <select  ng-blur="validaterole(changeUser.role)" ng-model="changeUser.role" ng-options="user.name as user.name for user in userRoles"></select>
+                            <small  class="form-text text-muted">{{uroleerror}}</small>
+                        </div> -->
+                        <!--                                             
+                        <div class="form-group">
+                            <label for="upass">Password</label>
+                            <input ng-blur="validatepassword(changeUser.password)" ng-model="changeUser.password" type="text" class="form-control">
+                            <small  class="form-text text-muted">{{upasserror}}</small>
+                        </div> -->
+                        <div class="form-group">
+                            <button  ng-disabled = "editCheck()" type="submit"  class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    
+                </div>
+                <!-- MODAL BODY DIV CLOSE -->
+            </div>
+            <!-- MODAL CONTENT DIV CLOSE -->
+        </div>
+        <!-- MODAL DIV CLOSE -->
+    </div>

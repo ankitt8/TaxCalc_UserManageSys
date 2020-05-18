@@ -1,0 +1,155 @@
+<div class="row">
+  <section class="col-lg-6">
+      <div class="box box-info" style="max-height: 50%;">
+          <div class="box-header with-border"><h3 class="box-title">Form Data</h3> </div>
+          <form class="form-horizontal needs-validation"  autocomplete="off" ng-submit="submit()" novalidate>
+              <div class="box-body">
+            
+                  <!-- <form autocomplete="off" ng-submit="submit()" class="card-text needs-validation" novalidate> -->
+                          
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label" for="income">Income</label>
+                    <div class="col-sm-8">
+                        <input  class="form-control" ng-blur="validateincome(form_details.income)" ng-model = "form_details.income" type="text" id="income" >
+                        <small  class="pull-right text-muted">{{ierror}}</small>
+                    </div>
+                    
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label" for="income">Section 80C(Basic Deduction)</label>
+                    <div class="col-sm-8">
+                      <input class="form-control" ng-blur="validates80c(form_details.section_80_c)"  ng-model = "form_details.section_80_c" type="text" id = "section80c" >
+                      <small  class="pull-right text-muted">{{s80cerror}}</small>
+                    </div>
+                    <!-- <small  class="col-md-4 offset-md-4 form-text text-muted">{{s80cerror}}</small> -->
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label" for="section80d">Section 80D(Medical Insurance Premium)</label>
+                    <div class="col-sm-8">
+                      <input class="form-control" ng-blur="validates80d(form_details.section_80_d)" ng-model="form_details.section_80_d" id = "section80d" type="text" >
+                      <small  class="pull-right text-muted">{{s80derror}}</small>
+                     </div>
+                    <!-- <small  class="col-md-4 offset-md-4 form-text text-muted">{{s80derror}}</small> -->
+                </div>
+                
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label" for="section80tta">Section 80TTA</label>
+                    <div class="col-sm-8">
+                      <input  ng-blur="validates80tta(form_details.section_80_tta)" ng-model="form_details.section_80_tta" id = "section80tta" type="text"  class="form-control" >
+                      <small  class="pull-right text-muted">{{s80ttaerror}}</small>
+                    </div>
+                    <!-- <small  class="col-md-4 offset-md-4 form-text text-muted">{{s80ttaerror}}</small> -->
+                </div>
+              </div>
+
+              <div class="box-footer">
+                  <button type="submit"  ng-disabled="validate()" class="btn btn-info pull-right">Calculate</button>
+              </div>
+          </form>
+    
+      </div>
+  
+      <div class="box box-info" style="max-height: 50%;">
+        <div class="box-header with-border">
+          <h3 class="box-title">Result</h3>
+         
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.</td>
+                <td>Salary</td>
+                <td>{{form_details.income | currency : 'Rs '}}</td>
+              </tr>
+              <tr>
+                <td>2.</td>
+                <td>Section 80C</td>
+                <td>{{form_details.section_80_c| currency : 'Rs '}}</td>
+              </tr>
+              <tr>
+                <td>3.</td>
+                <td>Section 80D</td>
+                <td>{{form_details.section_80_d | currency : 'Rs '}}</td>
+              </tr>
+              <tr>
+                <td>4.</td>
+                <td>Section 80TTA</td>
+                <td>{{form_details.section_80_tta | currency : 'Rs '}}</td>
+              </tr>
+              <tr>
+                <td>5.</td>
+                <td>Gross Taxable Income</td>
+                <td>{{form_details.gtaxincome | currency : 'Rs '}}</td>
+              </tr>
+              <tr>
+                <td>6.</td>
+                <td>Total Income Tax</td>
+                <td>{{form_details.tax | currency: 'Rs '}}</td>
+              </tr>
+            </tbody>
+          </table>
+    
+              
+        </div>
+        <!-- /.box-body -->
+       
+        <!-- box-footer -->
+      </div>
+        <!-- /.box -->
+   
+  </section>
+
+  <!-- /.col-md-6 -->
+  <section class="col-lg-6">
+      <div class="box box-info" style="max-height: 50%;">
+          <div class="box-header with-border">
+            <h3 class="box-title">Bar Graph</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+              <div style="width: 100%; height:300px;" id="echartbox"></div>
+          </div>
+          <!-- /.box-body -->
+          
+      </div>
+        <!-- /.box -->
+    
+      <div class="box box-info" style="max-height: 50%;">
+          <div class="box-header with-border"><h3 class="box-title">Detailed Description of Calculation</h3> </div>
+         
+          <div class="box-body">
+            
+              <table class="table table-bordered">
+              
+                <tbody ng-repeat="(key,value) in description ">
+                  <tr>
+                    <td >{{value.heading}}</td>
+                    <td>{{value.desc}}</td>
+                    <!-- <td><b ng-if="!$last">{{expression.desc}}</b></td> -->
+          
+                    <td>{{value.value | currency : 'Rs '}}</td>
+                      <!-- <td><b ng-if="!$last">{{expression.value}}</b></td> -->
+                  </tr>
+                
+                </tbody>
+              </table>
+        
+          </div> 
+      </div>
+          <!-- /.box -->
+    
+  </section>
+
+
+  <!-- /.col-md-6 -->
+</div>

@@ -1,0 +1,62 @@
+.day_box {
+    border: solid 1px;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin: 2px;
+}
+.success {
+    background-color: green;
+}
+.completed {
+    background-color: green;
+}
+
+.processing {
+    background-color: #00c0ef;
+}
+
+.failed {
+    background-color: red;
+}
+
+#span_ellipsis{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+#anchorHome:hover{
+    color:blue;
+}
+
+progress {
+    -webkit-appearance: none;
+    height: 3px;
+    width: 100%;
+}
+
+::-webkit-progress-bar {
+    background-color: rgb(238, 234, 234);
+}
+
+
+::-webkit-progress-value {
+background-color: deepskyblue;
+}
+
+.loginCss{
+    background-color: cornflowerblue;
+
+}
+
+.login-main{
+    text-align: center;
+    border: solid 1px black;
+    background-color: whitesmoke;
+    max-width: 15%;
+    margin-top: 20%;
+    margin-left: 40%;
+
+}

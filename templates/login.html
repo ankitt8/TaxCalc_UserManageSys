@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body style="background-color: cornflowerblue;">
+    
+    <div class="login-main" >
+        <h4>Sign In To Start Your Session</h4>
+        <form action="/login" method="POST" style="text-align: left; padding: 10px;" autocomplete="off" >
+            <div class="form-group">
+                <label for="uname">Username</label><br>
+                <input class="form-control" id="uname" name="username" type="text" value="">
+            </div>
+            <div class="form-group">
+                <label  for="">Password</label><br>
+                <input class="form-control" type="password" name = "password" value="">
+            </div>
+            <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+         
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul style="list-style-type:none; padding: 1px;">
+                    {% for category,message in messages %}
+                        <p></p>
+                        <li class="alert alert-{{category}}" style="padding: 5px;">{{message}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
